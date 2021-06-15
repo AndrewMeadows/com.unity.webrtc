@@ -3,11 +3,18 @@
 set LIBWEBRTC_DOWNLOAD_URL=https://github.com/Unity-Technologies/com.unity.webrtc/releases/download/M89/webrtc-win.zip
 set SOLUTION_DIR=%cd%\Plugin~
 
-echo -------------------
-echo Download LibWebRTC 
+if NOT EXIST webrtc-win.zip (
+    echo -------------------
+    echo Download LibWebRTC 
+    curl -L %LIBWEBRTC_DOWNLOAD_URL% > webrtc-win.zip
+)
 
-curl -L %LIBWEBRTC_DOWNLOAD_URL% > webrtc.zip
-7z x -aoa webrtc.zip -o%SOLUTION_DIR%\webrtc
+if EXIST %SOLUTION_DIR%\webrtc\ (
+    echo -------------------
+    echo Remove old webrtc
+    rmdir \s \q %SOLUTION_DIR%\webrtc\
+)
+7z x -aoa webrtc-win.zip -o%SOLUTION_DIR%\webrtc
 
 echo -------------------
 echo Build com.unity.webrtc Plugin
